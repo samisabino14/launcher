@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block title %} Nova postagem {% endblock %}
+
+
+{% block content %}
+
+<form action="{% url 'app:new_post' %}" method="POST">
+
+    {% if message %}
+
+    <div class="msg_error">
+        <p> {{message}} </p>
+    </div>
+
+    {% endif %}
+
+    {% csrf_token %}
+
+    <div class="form">
+        <br>
+
+        <div class="title">
+            <label for="title">Título:</label> <br>
+
+            <input type="text" name="title" id="title" placeholder="Título" required>
+        </div>
+        <br>
+
+        <div class="category">
+
+            <label for="category">Categoria:</label>
+            <select name="category" id="category">
+                {% if categories %}
+                    {% for category in categories %}
+                        <option value="{{category.id}}">{{category.name}}</option>
+                    {% endfor %}
+                {% endif %}
+            </select>
+        </div>
+
+        <div class="content">
+            <label for="content">Conteúdo:</label> <br>
+            <textarea id="content" name="content" rows="12" cols="30" placeholder="Conteúdo"></textarea>
+        </div>
+
+        <br>
+        <div class="submit">
+            <input type="submit" value="Guardar">
+        </div>
+        <br>
+
+    </div>
+</form>
+
+<div class="previous">
+    <a href="{% url 'app:post'%} ">Voltar</a>
+</div>
+
+{% endblock %}

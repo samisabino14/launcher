@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %} Nova categoria {% endblock %}
+
+
+{% block content %}
+
+<form action="{% url 'app:new_category' %}" method="POST">
+
+    {% if message %}
+
+    <div class="msg_error">
+        <p> {{message}} </p>
+    </div>
+
+    {% endif %}
+
+    {% csrf_token %}
+
+    <div class="form">
+        <br>
+
+        <div class="name">
+            <input type="text" name="name" id="name" placeholder="Nome da categoria" required>
+        </div>
+        <br>
+        <div class="description">
+
+            <label for="description">Descrição:</label> <br>
+            <textarea id="description" name="description" rows="12" cols="30" placeholder="Descrição"></textarea>
+
+        </div>
+        <br>
+        <div class="submit">
+            <input type="submit" value="Guardar">
+        </div>
+        <br>
+
+    </div>
+
+</form>
+
+
+<div class="previous">
+    <a href="{% url 'app:category'%} ">Voltar</a>
+</div>
+
+{% endblock %}

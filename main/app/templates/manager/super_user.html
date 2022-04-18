@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %} Gestor de Sistema {% endblock %}
+
+
+{% block content %}
+    {% if user.is_superuser %}
+        
+        <h1>Welcome, {{user.first_name}} {{user.last_name}}!</h1>
+
+        <h4>Super user</h4>
+
+        <button><a href="{% url 'app:category' %} ">Categorias</a></button>
+
+        <br><br>
+        <button><a href="{% url 'app:post' %} ">Postagens</a></button>
+        <br><br>
+
+        <div class="exit">
+            <a href="{% url 'app:logout' %} ">Terminar a sessão</a>
+        </div>
+
+    {% endif %}
+{% endblock %}

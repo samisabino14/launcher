@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block title %} Categorias {% endblock %}
+
+
+{% block content %}
+
+
+    {% if user.is_staff %}
+        {% if posts %}
+            {% for post in posts %}
+
+                <a href="{% url 'app:edit_post' post.id %} "><h3>{{post.title}}</h3>
+                </a>
+                <p>Categoria: <span>{{post.category.name}}</span></p>
+                <p>Descrição: <span>{{post.content}}</span></p>
+
+                <p>Autor: <span>{{post.author}}</span></p>
+                
+                {% if user.is_super %}
+                    <button class="btn_delete"><a href="{% url 'app:delete_post' post.id %} ">Remover</a></button>
+                {% endif %}
+
+            {% endfor %}
+
+        {% else %}
+            <h3>Nenhuma postagem criada!</h3>
+        {% endif %}
+
+        <br><br>
+        
+        <div class="posts">
+            <a href="{% url 'app:new_post' %} ">Nova postagem</a>
+        </div>
+        
+        <br>
+        <div class="previous">
+            <a href="{% url 'app:index' %} ">Voltar</a>
+        </div>
+
+    {% endif %}
+{% endblock %}

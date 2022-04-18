@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block title %} Início {% endblock %}
+
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+
+        <h4>Utilizador autenticado</h4>
+
+        <h1>Welcome, {{user.first_name}} {{user.last_name}}!</h1>
+        <button type="button"><a href="{% url 'app:logout' %} ">Sair</a></button>
+        
+        <br><br>
+
+
+
+    {% else %}
+
+        <h4>Não autenticado</h4>
+
+        <br>
+
+        <button type="button" class=""><a href="{% url 'app:login_view' %}">Logar</a></button>
+    
+        <br><br><br>
+
+    {% endif %}
+
+    {% if posts %}
+
+        {% for post in posts %}
+        
+        <br><br>
+        
+        <h2>{{post.category.name}}</h2>
+        <h3>{{post.title}}</h3>
+        <p>{{post.content}} </p>
+        <p>{{post.created_at.hour}}:{{post.created_at.minute}}, {{post.created_at.day}}/{{post.created_at.month}}/{{post.created_at.year}}</p>
+    
+        
+
+
+
+
+
+        {% endfor %}
+        
+    {% endif %} 
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block title %} Categorias {% endblock %}
+
+{% block content %}
+
+    <br>
+    {% if user.is_staff %}
+        {% if categories %}
+            {% for category in categories %}
+
+                <h3><a href="{% url 'app:edit_category' category.id %}"> {{category.name}}</a></h3>
+
+                <span>{{category.description}}</span>
+                <span>{{category.created_at.hour}}:{{category.created_at.minute}}, {{category.created_at.day}}/{{category.created_at.month}}/{{category.created_at.year}}</span>
+                <br>
+                
+                <button class="btn_delete"><a href="{% url 'app:delete_category' category.id %} ">Remover</a></button>
+                <br>
+
+            {% endfor %}
+        {% else %}
+
+            <h3>Nenhuma categoria criada!</h3>
+
+        {% endif %}
+    {% endif %}
+
+    <br><br>
+    <div class="">
+        <a href="{% url 'app:new_category' %} ">Nova categoria</a>
+    </div>
+
+    <br><br>
+    <div class="previous">
+        <a href="{% url 'app:index' %} ">Voltar</a>
+    </div>
+
+{% endblock %}

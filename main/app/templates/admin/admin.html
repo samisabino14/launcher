@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %} Admin de Sistema {% endblock %}
+
+
+{% block content %}
+
+    {% if user.is_staff %}
+
+        <h1>Welcome, {{user.first_name}} {{user.last_name}}!</h1>
+
+        <h4>Admin</h4>
+
+        <br>
+        <button><a href="{% url 'app:post' %} ">Postagens</a></button>
+        <br><br>
+    
+        <div class="exit">
+            <button type="button" class=""><a href="{% url 'app:logout' %} ">Terminar a sessão</a></button>
+        </div>
+
+    {% endif %}
+
+{% endblock %}

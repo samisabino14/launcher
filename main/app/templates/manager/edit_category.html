@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block title %} Editar categoria {% endblock %}
+
+
+{% block content %}
+
+<form action="{% url 'app:edit_category' category.id %}" method="POST">
+
+    {% if message %}
+
+    <div class="msg_error">
+        <p> {{message}} </p>
+    </div>
+
+    {% endif %}
+
+    {% csrf_token %}
+
+    <div class="form">
+        <br>
+
+        <div class="username">
+            <input type="text" name="name" id="name" placeholder="Name" required value="{{category.name}}">
+        </div>
+        <br>
+        <div class="description">
+
+            <label for="description">Descrição:</label> <br>
+            <textarea id="description" name="description" rows="12" cols="30"
+                placeholder="Descrição">{{category.description}}</textarea>
+
+        </div>
+        <br>
+        <div class="submit">
+            <input type="submit" value="Atualizar">
+        </div>
+        <br>
+
+    </div>
+
+</form>
+
+
+<div class="previous">
+    <a href="{% url 'app:category'%} ">Voltar</a>
+</div>
+
+{% endblock %}
