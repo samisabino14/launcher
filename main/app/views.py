@@ -5,16 +5,17 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 
-from .models import Category, Post, Comment
+from .models import Category, Post, Comment, User
 
 # Create your views here.
+
 
 def index(request):
 
     if request.user.is_staff:
         if request.user.is_superuser:
             return render(request, 'manager/super_user.html')
-        
+
         else:
             return render(request, 'admin/admin.html')
 
@@ -28,7 +29,34 @@ def index(request):
             'comments': comments
         })
 
-    
+
+def admin_manager_view(request):
+
+    if not request.user.is_superuser:
+        return HttpResponseRedirect(reverse('app:index'))
+
+    if request.method == 'POST':
+
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+
+        print(username, email, password)
+
+        user = User.objects.create_user(username, email, password)
+        user.is_staff = True
+        user.is_admin = True
+        user.save()
+
+        return HttpResponseRedirect(reverse('app:admin_manager'))
+
+    users = User.objects.all()
+
+    return render(request, 'manager/admin_manager.html', {
+        'users': users
+    })
+
+
 def login_view(request):
 
     if request.user.is_authenticated:
@@ -105,7 +133,6 @@ def new_category_view(request):
     return render(request, 'manager/new_category.html')
 
 
-
 def edit_category_view(request, id_category):
 
     if not request.user.is_superuser:
@@ -167,12 +194,13 @@ def new_post_view(request):
         return HttpResponseRedirect(reverse('app:index'))
 
     if request.method == 'POST':
-        
+
         title = request.POST['title']
         category = request.POST['category']
         content = request.POST['content']
 
-        post = Post.objects.filter(title=title, category=category, content=content).first()
+        post = Post.objects.filter(
+            title=title, category=category, content=content).first()
 
         if post:
             return render(request, 'admin/new_post.html', {
@@ -180,7 +208,8 @@ def new_post_view(request):
             })
 
         else:
-            new_post = Post(title=title, category=Category.objects.get(id=category), content=content, author=request.user.username)
+            new_post = Post(title=title, category=Category.objects.get(
+                id=category), content=content, author=request.user.username)
 
             new_post.save()
 
@@ -205,7 +234,8 @@ def edit_post_view(request, id_post):
         category = request.POST['category']
         content = request.POST['content']
 
-        post = Post.objects.filter(title=title, category=category, content=content).first()
+        post = Post.objects.filter(
+            title=title, category=category, content=content).first()
 
         if post:
             return HttpResponseRedirect(reverse('app:post'))

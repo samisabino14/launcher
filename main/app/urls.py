@@ -10,7 +10,11 @@ urlpatterns = [
 
     path('', views.index, name='index'),
     path('login/', views.login_view, name='login_view'),
-    
+
+    # ADMIN
+    path('admin_manager/', views.admin_manager_view, name='admin_manager'),
+
+
     # CATEGORIES
     path('category/', views.category, name='category'),
     path('new_category/', views.new_category_view, name='new_category'),
@@ -30,4 +34,5 @@ urlpatterns = [
 
     # LOGOUT
     path('logout/', views.logout_view, name='logout'),
+    
 ]

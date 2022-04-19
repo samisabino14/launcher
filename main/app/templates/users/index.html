@@ -16,14 +16,11 @@
 
 
     {% else %}
-
-        <h4>Não autenticado</h4>
-
-        <br>
-
-        <button type="button" class=""><a href="{% url 'app:login_view' %}">Logar</a></button>
     
-        <br><br><br>
+        <br>
+        <h4>Faça <a href="{% url 'app:login_view' %}">login</a> ou <a href="">registe-se</a> para ter acesso completo ao sistema.</h4>
+        <br>
+    
 
     {% endif %}
 
@@ -40,7 +37,7 @@
             
             {% if user.is_authenticated %}
                 {% if comments %}
-                    {% for comment in comments %}
+                {% for comment in comments %}
                         
                         {% if comment.post.id == post.id %}
                         

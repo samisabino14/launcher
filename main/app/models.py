@@ -1,9 +1,30 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 from django.urls import reverse
 
 # Create your models here.
+""" 
+
+class UserData(AbstractBaseUser):
+
+    # custom User models must have an integer PK
+    id = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255, unique=True, db_index=True)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='images')
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['first_name']
+
+        def __unicode__(self):
+            return self.first_name
+ """
 
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)

@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block title %} Gestão de Administradores {% endblock %}
+
+{% block content %}
+
+    <br>
+    {% if user.is_superuser %}
+
+        <h2>Administradores</h2>
+
+        {% if users %}
+            <table>
+                <tr>
+                    <th>Nome de utilizador</td>
+                    <th>Email</th>
+                </tr>
+
+                {% for user in users %}
+                    {% if user.is_staff == True and not user.is_superuser %}
+                        <tr>                            
+                            <td><a href="">{{user.username}}</a></td>
+                            <td>{{user.email}}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        {% endif %}
+
+        <form action="" method="POST">
+
+            {% if message %}
+
+            <div class="msg_error">
+                <p> {{message}} </p>
+            </div>
+
+            {% endif %}
+
+            {% csrf_token %}
+
+            <div class="form">
+                <br>
+
+                <div class="username">
+                    <input type="text" name="username" id="username" placeholder="Nome de utilizador" required>
+                </div>
+                <br>
+                <div class="email">
+                    <input type="email" name="email" id="email" placeholder="Email" required>
+                </div>
+                <br>
+                <div class="password">
+                    <input type="password" name="password" id="password" placeholder="Palavra-passe" required>
+                </div>
+                <br><br>
+                <div class="submit">
+                    <input type="submit" value="Guardar">
+                </div>
+                <br>
+
+            </div>
+
+        </form>
+
+
+
+    {% endif %}
+
+    <br><br>
+    <div class="previous">
+        <a href="{% url 'app:index' %} ">Voltar</a>
+    </div>
+
+{% endblock %}
