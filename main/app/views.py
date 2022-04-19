@@ -20,10 +20,12 @@ def index(request):
 
     else:
         posts = posts = Post.objects.all()
+        comments = Comment.objects.all()
 
         return render(request, 'users/index.html', {
 
-            'posts': posts
+            'posts': posts,
+            'comments': comments
         })
 
     
@@ -239,6 +241,74 @@ def delete_post_view(request, id_post):
     post.delete()
 
     return HttpResponseRedirect(reverse('app:post'))
+
+
+def new_comment_view(request):
+
+    if request.user.is_staff:
+        return HttpResponseRedirect(reverse('app:index'))
+
+    if request.method == 'POST':
+
+        comment = request.POST['comment']
+        post = request.POST['post']
+
+        if len(comment) < 3:
+
+            return HttpResponseRedirect(reverse('app:index'))
+
+        else:
+
+            name = request.user.first_name + ' ' + request.user.last_name
+            email = request.user.email
+
+            new_comment = Comment(name=name, email=email, content=comment,
+                                  website="http://samspaceblog.ao", post=Post.objects.get(id=post))
+
+            new_comment.save()
+
+    return HttpResponseRedirect(reverse('app:index'))
+
+
+def edit_comment_view(request, id_post, id_comment):
+
+    if request.user.is_staff:
+        return HttpResponseRedirect(reverse('app:index'))
+
+    if request.method == 'POST':
+
+        comment = request.POST['comment']
+        post = request.POST['post']
+
+        if len(comment) < 3:
+            return HttpResponseRedirect(reverse('app:index'))
+
+        else:
+
+            edit_comment = Comment.objects.get(id=id_comment)
+            edit_comment.content = comment
+            edit_comment.save()
+
+            return HttpResponseRedirect(reverse('app:index'))
+
+    post = Post.objects.get(pk=id_post)
+    comment = Comment.objects.get(pk=id_comment)
+
+    return render(request, 'users/edit_comment.html', {
+
+        'comment': comment,
+        'post': post
+    })
+
+
+def delete_comment_view(request, id_comment):
+
+    if not request.user.is_staff:
+
+        comment = Comment.objects.get(pk=id_comment)
+        comment.delete()
+
+        return HttpResponseRedirect(reverse('app:index'))
 
 
 def logout_view(request):
