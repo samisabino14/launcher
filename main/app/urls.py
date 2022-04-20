@@ -14,6 +14,9 @@ urlpatterns = [
     # ADMIN
     path('admin_manager/', views.admin_manager_view, name='admin_manager'),
 
+    # USERS
+    path('users_register/', views.users_manager_view, name='users_manager'),
+
 
     # CATEGORIES
     path('category/', views.category, name='category'),

@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+{% block title %} Gestão de Utilizadores {% endblock %}
+
+{% block content %}
+
+    <br>
+    {% if user.is_staff %}
+
+        <h2>Utilizadores</h2>
+
+        {% if users %}
+            <table>
+                <tr>
+                    <th>Nome de utilizador</td>
+                    <th>Email</th>
+                </tr>
+
+                {% for user in users %}
+                    {% if not user.is_staff%}
+                        <tr>                            
+                            <td><a href="">{{user.username}}</a></td>
+                            <td>{{user.email}}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        {% else %}
+
+        {% endif %}
+    
+    
+    {% else %}
+
+        <h5>Cadastra-se aqui</h5>
+
+    {% endif %}
+
+    <form action="{% url 'app:users_manager' %}" method="POST">
+
+        {% if message %}
+
+        <div class="msg_error">
+            <p> {{message}} </p>
+        </div>
+
+        {% endif %}
+
+        {% csrf_token %}
+
+        <div class="form">
+            <br>
+            <input type="hidden" name="typeUser" id="typeUser" value="utilizador" required>
+
+            <div class="username">
+                <input type="text" name="username" id="username" placeholder="Nome de utilizador" required>
+            </div>
+            <br>
+            <div class="email">
+                <input type="email" name="email" id="email" placeholder="Email" required>
+            </div>
+            <br>
+            <div class="password">
+                <input type="password" name="password" id="password" placeholder="Palavra-passe" required>
+            </div>
+            <br><br>
+            <div class="first_name">
+                <input type="text" name="first_name" id="first_name" placeholder="Primeiro nome" required>
+            </div>
+            <br>
+            <div class="last_name">
+                <input type="text" name="last_name" id="last_name" placeholder="Último nome" required>
+            </div>
+
+            <br><!-- 
+            <div class="imge">
+                <input type="file" id="imageProfile" name="imageProfile">
+            </div> -->
+            <br><br>
+            <div class="submit">
+                <input type="submit" value="Guardar">
+            </div>
+            <br>
+
+        </div>
+
+    </form>
+    <br><br>
+    <div class="previous">
+        <a href="{% url 'app:index' %} ">Voltar</a>
+    </div>
+
+{% endblock %}

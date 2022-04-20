@@ -8,7 +8,7 @@
 
         <h4>Utilizador autenticado</h4>
 
-        <h1>Welcome, {{user.first_name}} {{user.last_name}}!</h1>
+        <h1>Welcome, {{user.first_name}} {{user.last_name}}</h1>
         <button type="button"><a href="{% url 'app:logout' %} ">Sair</a></button>
         
         <br><br>
@@ -18,7 +18,8 @@
     {% else %}
     
         <br>
-        <h4>Faça <a href="{% url 'app:login_view' %}">login</a> ou <a href="">registe-se</a> para ter acesso completo ao sistema.</h4>
+        <h4>Faça <a href="{% url 'app:login_view' %}">login</a> ou <a href="{% url 'app:users_manager' %}">registe-se</a> para
+            ter "acesso de utilizador completo" ao sistema.</h4>
         <br>
     
 
@@ -37,25 +38,28 @@
             
             {% if user.is_authenticated %}
                 {% if comments %}
-                {% for comment in comments %}
-                        
+                    {% for comment in comments %}
+                        {% for userData in userDatas %}
                         {% if comment.post.id == post.id %}
-                        
-                        <h5>{{comment.name}} </h5>
-                        <p>{{comment.content}} </p>
-                            
-                            {% if comment.email == user.email %}
-                            <button><a href="{% url 'app:edit_comment' post.id comment.id %}">Editar</a></button>
-                            <button><a href="{% url 'app:delete_comment' comment.id %}">Eliminar</a></button>
-                            {% endif %}
-
-                            <br><br>
+                                {% if comment.name == userData.username %}
+                                
+                                    <h6>{{userData.first_name}} {{userData.last_name}}</h6>
+                                    <p>{{comment.content}} </p>
+                                    
+                                    {% if comment.email == user.email %}
+                                    <button><a href="{% url 'app:edit_comment' post.id comment.id %}">Editar</a></button>
+                                    <button><a href="{% url 'app:delete_comment' comment.id %}">Eliminar</a></button>
+                                    {% endif %}
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
+                    {% endfor %}
 
                 {% else %}
                     
                 {% endif %}
+                
+                <br><br>
                 
                 <form action="{% url 'app:new_comment' %}" method="POST">
                 
@@ -76,7 +80,9 @@
                     </form>
                     
             {% endif %}
-            {% endfor %}
-            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <br><br>
 
 {% endblock %}

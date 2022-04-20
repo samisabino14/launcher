@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 
-from .models import Category, Post, Comment, User
+from .models import User, UserData, Category, Post, Comment
 
 # Create your views here.
 
@@ -20,13 +20,15 @@ def index(request):
             return render(request, 'admin/admin.html')
 
     else:
-        posts = posts = Post.objects.all()
+        posts = Post.objects.all()
         comments = Comment.objects.all()
+        userDatas = User.objects.all()
 
         return render(request, 'users/index.html', {
 
             'posts': posts,
-            'comments': comments
+            'comments': comments,
+            'userDatas': userDatas
         })
 
 
@@ -35,24 +37,43 @@ def admin_manager_view(request):
     if not request.user.is_superuser:
         return HttpResponseRedirect(reverse('app:index'))
 
+    users = User.objects.all()
+
+    return render(request, 'manager/admin_manager.html', {
+        'users': users
+    })
+
+
+def users_manager_view(request):
+
     if request.method == 'POST':
 
         username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
-
-        print(username, email, password)
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        typeUser = request.POST['typeUser']
 
         user = User.objects.create_user(username, email, password)
-        user.is_staff = True
-        user.is_admin = True
-        user.save()
+        userData = UserData(username=username)
 
-        return HttpResponseRedirect(reverse('app:admin_manager'))
+        if request.user.is_superuser:
+            if typeUser == 'admin':
+                user.is_staff = True
+                user.is_admin = True
+
+        user.first_name = first_name
+        user.last_name = last_name
+
+        user.save()
+        userData.save()
+
+        return HttpResponseRedirect(reverse('app:index'))
 
     users = User.objects.all()
 
-    return render(request, 'manager/admin_manager.html', {
+    return render(request, 'admin/users_manager.html', {
         'users': users
     })
 
@@ -284,12 +305,10 @@ def new_comment_view(request):
         post = request.POST['post']
 
         if len(comment) < 3:
-
             return HttpResponseRedirect(reverse('app:index'))
 
         else:
-
-            name = request.user.first_name + ' ' + request.user.last_name
+            name = request.user.username
             email = request.user.email
 
             new_comment = Comment(name=name, email=email, content=comment,
